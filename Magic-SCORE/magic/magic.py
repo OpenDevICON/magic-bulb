@@ -18,10 +18,11 @@ class Magic(IconScoreBase):
     def on_update(self) -> None:
         super().on_update()
 
+
     @eventlog(indexed=1)
     def Color(self,_color:str) -> None:
         pass
-        
+
     @external
     def set_color(self, _color: str) -> None:
         if _color not in COLORS:
