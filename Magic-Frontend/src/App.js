@@ -8,14 +8,26 @@ import 'semantic-ui-css/semantic.min.css';
 import './bootstrap-grid.css';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { Card } from 'semantic-ui-react';
+
 // import { Grid } from 'semantic-ui-react';
+
+const headerContainer = {
+  };
 
 class App extends React.Component{
     
     render(){
 
         return(
-            <div className='row appContainer'>
+        <>
+            <div style={headerContainer} style={{backgroundColor:'black'}} className='pb-4 row d-flex align-items-center justify-content-center'>
+                <Card centered style={{backgroundColor:'black', color: 'white'}} className='p-3 m-2' >
+                <h1 className='mainHeader'>MAGIC BULB</h1>
+                </Card>
+            </div>
+
+            <div className='row appContainer pt-3'>
                 
                 <div className='col-md-6 col-lg-7 col-sm-12 p-1'>
                     <Buttons />
@@ -26,6 +38,7 @@ class App extends React.Component{
                 </div>
                 
             </div>
+        </>
         );
     };
 }

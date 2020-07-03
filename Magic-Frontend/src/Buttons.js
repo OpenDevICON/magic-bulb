@@ -25,10 +25,7 @@ const refreshBtnStyle = {
   width: '300px'
 };
 
-const headerContainer = {
-  padding: '20px',
-  marginBottom: '90px'
-};
+
 
 
 function sleep(ms) {
@@ -134,13 +131,8 @@ class Buttons extends React.Component{
     render(){
         return(
           <>
-            <div className='row d-flex align-items-center justify-content-center mainContainer'>
+            <div className='row d-flex justify-content-center mainContainer'>
               <div className='col-md-12'>
-                <div style={headerContainer} className=' row d-flex align-items-center justify-content-center'>
-                  <Card centered style={{backgroundColor:'black', color: 'white'}} className='p-3' >
-                    <h1 className='mainHeader'>MAGIC</h1>
-                  </Card>
-                </div>
                 <div className='row d-flex align-items-center justify-content-center buttonContainer'>
                   <Button color='red bulb-btn' disabled={this.state.loading} loading={this.state.loading && this.state.buttonLoading==='RED'} className='m-4' onClick={()=>this.handlerSendTransaction('RED')} >Red</Button>
                   <Button color='green bulb-btn' disabled={this.state.loading} loading={this.state.loading && this.state.buttonLoading==='GREEN'} className='m-4' onClick={()=>this.handlerSendTransaction('GREEN') }>Green</Button>
