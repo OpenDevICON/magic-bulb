@@ -5,6 +5,10 @@ import { IconExtension } from "@magic-ext/icon";
 import IconService from "icon-sdk-js";
 import Light from './Light';
 
+import { ToastContainer, toast } from 'react-toastify';
+import { Button, Card, Header } from 'semantic-ui-react';
+import { IoMdRefresh } from 'react-icons/io';
+
 const { IconBuilder, IconAmount, IconConverter,HttpProvider} = IconService;
 const httpProvider = new HttpProvider('https://bicon.net.solidwallet.io/api/v3');
 const iconService = new IconService(httpProvider);
@@ -16,13 +20,30 @@ const magic = new Magic("pk_test_BAD78299B2E4EA9D", {
   }
 });
 
+
+const refreshBtnStyle = {
+  width: '300px'
+};
+
+const headerContainer = {
+  padding: '20px',
+  marginBottom: '90px'
+};
+
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 class Buttons extends React.Component{
     constructor(props) {
 
         super(props);
         this.state = {
             tx:'',
-            color:''
+            color:'white',
+            loading: false,
+            buttonLoading: ''
         };
     
         // I've just put these binding in the constructor 
@@ -32,10 +53,14 @@ class Buttons extends React.Component{
         this.handlerSendTransaction=this.handlerSendTransaction.bind(this)
       }
       
+      async componentDidMount() {
+        await this.getTransaction();
+      }
     
     handlerSendTransaction = async (key) => {
-        
+      this.setState({loading: true, buttonLoading: key});
 
+      try{
         const metadata = await magic.user.getMetadata();
     
         const txObj = new IconBuilder.CallTransactionBuilder()
@@ -52,7 +77,7 @@ class Buttons extends React.Component{
             "_color": key
           })
           .build();
-          console.log("called")
+          // console.log("called")
         const txhash = await magic.icon.sendTransaction(txObj);
     
         // setTxHash(txhash);
@@ -60,8 +85,21 @@ class Buttons extends React.Component{
             // color:.target.id
             
         })
-        console.log(key)
-        console.log("transaction result", txhash);
+        toast.success("Successfully sent tx to contract");
+        // console.log(key)
+        // console.log("transaction result", txhash);
+        
+        await sleep(3000);
+
+        await this.getTransaction();
+        
+      }
+      catch(err) {
+        toast.error(err.rawMessage);
+        console.log(JSON.stringify(err));
+      }
+
+      this.setState({loading: false, buttonLoading:''});
     };
     // onInputChange=(event)=>{
     //     console.log(event.target.value)
@@ -80,32 +118,47 @@ class Buttons extends React.Component{
         //     params: IconConverter.toRawTransaction(txnData),
         //     id: 50889,
         //   };
-        
-        const result = await iconService.call(call).execute();
-        // const response= await IconBuilder.Call(txObj);
-        console.log(result)
-
-    this.setState({color:result})
+        try{
+          const result = await iconService.call(call).execute();
+          // const response= await IconBuilder.Call(txObj);
+          // console.log(result)
+          console.log(result);
+          this.setState({color:result})
+        } catch(err) {
+          toast.error(err.rawMessage);
+          console.log(JSON.stringify(err));
+        }
         
     }
 
     render(){
         return(
-            <div className='btn'>
-                
-                <button onClick={()=>this.handlerSendTransaction('RED')} >Red</button>
-                <button onClick={()=>this.handlerSendTransaction('GREEN') }>Green</button>
-                <button onClick={()=>this.handlerSendTransaction('BLUE')}>Blue</button>
-                <button onClick={()=>this.handlerSendTransaction('YELLOW')}>Yellow</button>
-                <button onClick={this.getTransaction}>Refresh</button>
+          <>
+            <div className='row d-flex align-items-center justify-content-center mainContainer'>
+              <div className='col-md-12'>
+                <div style={headerContainer} className=' row d-flex align-items-center justify-content-center'>
+                  <Card centered style={{backgroundColor:'black', color: 'white'}} className='p-3' >
+                    <h1 className='mainHeader'>MAGIC</h1>
+                  </Card>
+                </div>
+                <div className='row d-flex align-items-center justify-content-center buttonContainer'>
+                  <Button color='red bulb-btn' disabled={this.state.loading} loading={this.state.loading && this.state.buttonLoading==='RED'} className='m-4' onClick={()=>this.handlerSendTransaction('RED')} >Red</Button>
+                  <Button color='green bulb-btn' disabled={this.state.loading} loading={this.state.loading && this.state.buttonLoading==='GREEN'} className='m-4' onClick={()=>this.handlerSendTransaction('GREEN') }>Green</Button>
+                  <Button color='blue bulb-btn' disabled={this.state.loading} loading={this.state.loading && this.state.buttonLoading==='BLUE'} className='m-4' onClick={()=>this.handlerSendTransaction('BLUE')}>Blue</Button>
+                  <Button color='yellow bulb-btn' disabled={this.state.loading} loading={this.state.loading && this.state.buttonLoading==='YELLOW'} className='m-4' onClick={()=>this.handlerSendTransaction('YELLOW')}>Yellow</Button>
+                </div>
 
-                <div className="bulb">
+
+                <div className="row d-flex align-items-center justify-content-center bulb">
                     <Light color={this.state.color}/>   
                 </div>
-                <div>
+                <div className="row d-flex align-items-center justify-content-center mb-2">
+                  <IoMdRefresh size={32} color='white' style={{cursor:'pointer'}} onClick={this.getTransaction} />
+                </div>
+                <div className="row d-flex align-items-center justify-content-center">
                     {this.state.tx ? (
                     <div>
-                        <div>Send transaction success</div>
+                        <h2 style={{color: 'white', padding: '10px', textAlign:'center'}}>Tx Hash:</h2>
                         <div className="info">
                         <a
                             href={`https://bicon.tracker.solidwallet.io/transaction/${this.state.tx}`}
@@ -117,12 +170,18 @@ class Buttons extends React.Component{
                         </div>
                     </div>
                     ) : (
-                    <div />
+                    null
                     )}
                 
                 </div>
-           </div>
+                <div className="row d-flex align-items-center justify-content-center">
+                  {/* <Button style={refreshBtnStyle} onClick={this.getTransaction}>Refresh</Button> */}
 
+                </div>
+              </div>
+           </div>
+           <ToastContainer />
+          </>
         );
     }
 }
