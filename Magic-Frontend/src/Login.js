@@ -3,14 +3,14 @@ import React, { useState, useEffect } from "react";
 // import { content } from "./data/contract";
 import { Magic } from "magic-sdk";
 import { IconExtension } from "@magic-ext/icon";
-import IconService from "icon-sdk-js";
+// import IconService from "icon-sdk-js";
 
 import { ToastContainer, toast } from 'react-toastify';
 import { Header, Card, Button, Icon, Input } from 'semantic-ui-react';
 import { FaUserCircle } from "react-icons/fa";
 import { RiLoginCircleLine } from 'react-icons/ri';
 
-const { IconBuilder, IconAmount, IconConverter } = IconService;
+// const { IconBuilder, IconAmount, IconConverter } = IconService;
 
 const magic = new Magic("pk_test_BAD78299B2E4EA9D", {
   extensions: {
@@ -96,7 +96,7 @@ export default function Login() {
             </Card.Header>
 
             <Card.Meta textAlign='center' >
-                <a href={`https://bicon.tracker.solidwallet.io/address/${publicAddress}`} target="_blank">
+                <a href={`https://bicon.tracker.solidwallet.io/address/${publicAddress}`} rel="noopener noreferrer" target="_blank">
                   {publicAddress}
                 </a>
             </Card.Meta>

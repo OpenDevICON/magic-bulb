@@ -4,7 +4,7 @@ import Bulb from 'react-bulb';
 const Light= (props) => (
     <div className="light">
         <Bulb
-    size={40}
+    size={60}
     color={props.color}
   />
 

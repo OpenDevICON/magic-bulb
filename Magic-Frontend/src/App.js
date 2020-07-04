@@ -1,6 +1,6 @@
 import React from 'react';
 import Buttons from './Buttons';
-import Light from './Light';
+// import Light from './Light';
 import Login from './Login';
 import './App.css';
 
@@ -12,8 +12,6 @@ import { Card } from 'semantic-ui-react';
 
 // import { Grid } from 'semantic-ui-react';
 
-const headerContainer = {
-  };
 
 class App extends React.Component{
     
@@ -21,7 +19,7 @@ class App extends React.Component{
 
         return(
         <>
-            <div style={headerContainer} style={{backgroundColor:'black'}} className='pb-4 row d-flex align-items-center justify-content-center'>
+            <div style={{backgroundColor:'black'}} className='pb-4 row d-flex align-items-center justify-content-center'>
                 <Card centered style={{backgroundColor:'black', color: 'white'}} className='p-3 m-2' >
                 <h1 className='mainHeader'>MAGIC BULB</h1>
                 </Card>

@@ -1,15 +1,15 @@
 // import React from 'react';
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Magic } from "magic-sdk";
 import { IconExtension } from "@magic-ext/icon";
 import IconService from "icon-sdk-js";
 import Light from './Light';
 
 import { ToastContainer, toast } from 'react-toastify';
-import { Button, Card, Header } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import { IoMdRefresh } from 'react-icons/io';
 
-const { IconBuilder, IconAmount, IconConverter,HttpProvider} = IconService;
+const { IconBuilder, IconConverter,HttpProvider} = IconService;
 const httpProvider = new HttpProvider('https://bicon.net.solidwallet.io/api/v3');
 const iconService = new IconService(httpProvider);
 const magic = new Magic("pk_test_BAD78299B2E4EA9D", {
@@ -19,12 +19,6 @@ const magic = new Magic("pk_test_BAD78299B2E4EA9D", {
     })
   }
 });
-
-
-const refreshBtnStyle = {
-  width: '300px'
-};
-
 
 
 
@@ -155,6 +149,7 @@ class Buttons extends React.Component{
                         <a
                             href={`https://bicon.tracker.solidwallet.io/transaction/${this.state.tx}`}
                             target="_blank"
+                            rel="noopener noreferrer"
                         >
                             {this.state.tx}
                             
