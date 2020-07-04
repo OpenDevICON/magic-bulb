@@ -2,8 +2,9 @@ import React from 'react';
 import Buttons from './Buttons';
 // import Light from './Light';
 import Login from './Login';
-import './App.css';
+import MagicProvider from './helpers/magicProvider';
 
+import './App.css';
 import 'semantic-ui-css/semantic.min.css';
 import './bootstrap-grid.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,7 +19,7 @@ class App extends React.Component{
     render(){
 
         return(
-        <>
+        <MagicProvider>
             <div style={{backgroundColor:'black'}} className='pb-4 row d-flex align-items-center justify-content-center'>
                 <Card centered style={{backgroundColor:'black', color: 'white'}} className='p-3 m-2' >
                 <h1 className='mainHeader'>MAGIC BULB</h1>
@@ -36,7 +37,7 @@ class App extends React.Component{
                 </div>
                 
             </div>
-        </>
+        </MagicProvider>
         );
     };
 }

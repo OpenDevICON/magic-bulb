@@ -1,9 +1,9 @@
 // import React from 'react';
 import React from "react";
-import { Magic } from "magic-sdk";
-import { IconExtension } from "@magic-ext/icon";
 import IconService from "icon-sdk-js";
 import Light from './Light';
+
+import { withMagicContext } from './helpers/magicProvider';
 
 import { ToastContainer, toast } from 'react-toastify';
 import { Button } from 'semantic-ui-react';
@@ -12,14 +12,6 @@ import { IoMdRefresh } from 'react-icons/io';
 const { IconBuilder, IconConverter,HttpProvider} = IconService;
 const httpProvider = new HttpProvider('https://bicon.net.solidwallet.io/api/v3');
 const iconService = new IconService(httpProvider);
-const magic = new Magic("pk_test_BAD78299B2E4EA9D", {
-  extensions: {
-    icon: new IconExtension({
-      rpcUrl: "https://bicon.net.solidwallet.io/api/v3"
-    })
-  }
-});
-
 
 
 function sleep(ms) {
@@ -34,7 +26,8 @@ class Buttons extends React.Component{
             tx:'',
             color:'white',
             loading: false,
-            buttonLoading: ''
+            buttonLoading: '',
+            magicData: {}
         };
     
         // I've just put these binding in the constructor 
@@ -49,9 +42,15 @@ class Buttons extends React.Component{
       }
     
     handlerSendTransaction = async (key) => {
+      const {isLoggedIn} = this.props.value.loginData;
+      if(!isLoggedIn){ 
+        toast.error("Please Login First!!");
+        return;
+      }
       this.setState({loading: true, buttonLoading: key});
 
       try{
+        const { magic } = this.props.value;
         const metadata = await magic.user.getMetadata();
     
         const txObj = new IconBuilder.CallTransactionBuilder()
@@ -113,7 +112,6 @@ class Buttons extends React.Component{
           const result = await iconService.call(call).execute();
           // const response= await IconBuilder.Call(txObj);
           // console.log(result)
-          console.log(result);
           this.setState({color:result})
         } catch(err) {
           toast.error(err.rawMessage);
@@ -172,7 +170,7 @@ class Buttons extends React.Component{
         );
     }
 }
-export default Buttons;
+export default withMagicContext(Buttons);
 
 
 // const Buttons=()=>{
