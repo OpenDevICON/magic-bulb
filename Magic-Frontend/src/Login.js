@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-
+import IconService from "icon-sdk-js";
 
 import { MagicContext } from './helpers/magicProvider';
 
@@ -9,7 +9,7 @@ import { RiLoginCircleLine } from 'react-icons/ri';
 
 
 export default function Login() {
-    const { loginData, addressData, metaData, emailData, login, logout } = useContext(MagicContext);
+    const { loginData, addressData, metaData, emailData, login, logout ,userBalance} = useContext(MagicContext);
 
     return (
       <>
@@ -40,6 +40,11 @@ export default function Login() {
                 </a>
             </Card.Meta>
             
+            <Card.Meta textAlign='center'>
+              Balance:{JSON.stringify(userBalance.balance).replace(/"/g,'')} ICX
+            </Card.Meta>
+
+
               {/* <Butt onClick={logout}>Logout</button> */}
               <Button className='logButton center' onClick={logout} icon labelPosition='left' size='small' color='red'>
                 <Icon name='power' />

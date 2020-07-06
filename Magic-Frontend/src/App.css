@@ -11,6 +11,16 @@
     text-align: center;
 }
 
+.faucet{
+   
+    
+    display: inline-block;
+    position: absolute;
+    right: 35px;
+    top: 30px;
+
+    
+}
 .logButton {
     width: 200px !important;
     align-self: center !important;

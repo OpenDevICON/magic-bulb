@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Magic } from "magic-sdk";
 import { IconExtension } from "@magic-ext/icon";
 import { ToastContainer, toast } from 'react-toastify';
+import IconService from "icon-sdk-js";
+
+const { IconBuilder, IconAmount, IconConverter ,HttpProvider } = IconService;
+const httpProvider = new HttpProvider('https://bicon.net.solidwallet.io/api/v3');
+const iconService = new IconService(httpProvider);
 
 const MagicContext = React.createContext(null);
 
@@ -19,6 +24,7 @@ export default function MagicProvider({ children }) {
   const [ publicAddress, setPublicAddress ] = useState("");
   const [ email, setEmail ] = useState("");
   const [ userMetadata, setUserMetadata ] = useState("");
+  const [balance,setBalance]=useState(0);
 
   useEffect(() => {
     magic.user.isLoggedIn().then(async magicIsLoggedIn => {
@@ -26,6 +32,9 @@ export default function MagicProvider({ children }) {
       if (magicIsLoggedIn) {
         try{
           const publicAddress = await magic.icon.getAccount();
+          // const balance = await iconService.getBalance(publicAddress).execute();
+          const balance = parseFloat(IconConverter.toNumber(await iconService.getBalance(publicAddress).execute()) / Math.pow(10, 18),).toFixed(2);
+          setBalance(balance);
           setPublicAddress(publicAddress);
           setUserMetadata(await magic.user.getMetadata());
         
@@ -65,6 +74,9 @@ export default function MagicProvider({ children }) {
     },
     addressData: {
       publicAddress
+    },
+    userBalance:{
+      balance
     },
     metaData: {
       userMetadata
